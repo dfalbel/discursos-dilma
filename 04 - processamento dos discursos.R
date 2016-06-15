@@ -15,13 +15,14 @@ processar <- function(arq){
   textos <- arq %>%
     read_html() %>%
     html_node("#content") %>%
-    html_node("#parent-fieldname-text") %>%
+    html_nodes("#parent-fieldname-text") %>%
     html_text()
+  
   data_frame(
     id = str_replace_all(arq, fixed(".html"), "") %>% 
       str_replace_all(fixed("data-raw/discursos//"), "") %>%
       as.integer(),
-    texto = textos %>% str_trim()
+    texto = paste(textos %>% str_trim())
   )
 }
 
@@ -29,3 +30,9 @@ processar <- function(arq){
 
 dados_textos <- map_df(arqs, processar)
 
+
+# Juntar bases ------------------------------------------------------------
+
+dados <- read.csv("data/base_intermediaria.csv")
+dados <- left_join(dados, dados_textos, by = "id")
+write.csv(dados, "data/base_discursos.csv", row.names = F)
