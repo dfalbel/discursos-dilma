@@ -1,0 +1,4 @@
+*.html linguist-vendored=true
+*.css linguist-vendored=true
+*.scss linguist-vendored=true
+*.Rmd linguist-vendored=false
